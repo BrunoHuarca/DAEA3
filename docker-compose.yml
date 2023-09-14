@@ -1,0 +1,48 @@
+version: '3.4'
+
+services: 
+
+  frontend:
+    image: pizzafrontend
+    build:
+      context: frontend
+      dockerfile: Dockerfile
+    environment: 
+      - backendUrl=http://backend
+    ports:
+      - "5902:80"
+    depends_on: 
+      - backend
+  backend:
+    image: pizzabackend
+    build: 
+      context: backend
+      dockerfile: Dockerfile
+    ports: 
+      - "5000:80"
+
+# name: Deploy to S3
+
+# on:
+#   push:
+#     branches:
+#       - main  # Cambia esto si tu rama principal tiene un nombre diferente
+
+# jobs:
+#   deploy:
+#     runs-on: ubuntu-latest
+
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v2
+
+#       - name: Configure AWS credentials
+#         uses: aws-actions/configure-aws-credentials@v1
+#         with:
+#           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#           aws-region: us-east-1
+
+#       - name: Sync files to S3
+#         run: |
+#           aws s3 sync . s3://lab03-des
